@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini World Tools-Picsit Cá</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    header {
+      text-align: center;
+      padding: 30px 0;
+      width: 100%;
+      margin-bottom: 30px;
+      animation: fadeIn 1s ease;
+    }
+    
+    .logo {
+      font-size: 4.5rem;
+      margin-bottom: 15px;
+      color: #0097a7;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-size: 3.2rem;
+      margin-bottom: 15px;
+      background: linear-gradient(90deg, #006064, #00838f, #0097a7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .subtitle {
+      font-size: 1.5rem;
+      color: #006064;
+      margin-bottom: 20px;
+      max-width: 800px;
+      line-height: 1.6;
+    }
+    
+    .tools-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+      margin: 30px 0 50px;
+      width: 100%;
+      animation: slideUp 1s ease;
+    }
+    
+    .tool-card {
+      width: 450px;
+      height: 550px;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transition: all 0.4s ease;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .tool-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Card Auto 2D */
+    .card-2d {
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea);
+      border: 3px solid #0097a7;
+    }
+    
+    /* Card Auto 3D */
+    .card-3d {
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      border: 3px solid #4361ee;
+    }
+    
+    .card-header {
+      height: 220px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 8rem;
+    }
+    
+    .card-2d .card-header {
+      background: rgba(178, 235, 242, 0.6);
+      color: #00838f;
+    }
+    
+    .card-3d .card-header {
+      background: rgba(26, 26, 46, 0.6);
+      color: #4361ee;
+    }
+    
+    .card-content {
+      padding: 35px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .card-2d .card-content {
+      color: #006064;
+    }
+    
+    .card-3d .card-content {
+      color: #e6e6ff;
+    }
+    
+    .card-title {
+      font-size: 2.5rem;
+      margin-bottom: 25px;
+      font-weight: bold;
+    }
+    
+    .card-description {
+      font-size: 1.25rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      flex-grow: 1;
+    }
+    
+    .card-features {
+      margin-bottom: 30px;
+      padding-left: 20px;
+    }
+    
+    .card-features li {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+    
+    .btn {
+      display: block;
+      padding: 18px;
+      font-size: 1.3rem;
+      border-radius: 50px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    
+    .btn-2d {
+      background: #0097a7;
+      color: white;
+    }
+    
+    .btn-2d:hover {
+      background: #00838f;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    
+    .btn-3d {
+      background: #4361ee;
+      color: white;
+    }
+    
+    .btn-3d:hover {
+      background: #3a0ca3;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 25px;
+      color: #006064;
+      font-size: 1.1rem;
+      width: 100%;
+      border-top: 1px solid rgba(0, 150, 136, 0.3);
+      animation: fadeIn 1.5s ease;
+    }
+    
+    .decoration {
+      position: absolute;
+      z-index: -1;
+    }
+    
+    .circle {
+      border-radius: 50%;
+      opacity: 0.2;
+    }
+    
+    .circle-1 {
+      width: 300px;
+      height: 300px;
+      background: #00838f;
+      top: 10%;
+      left: 5%;
+    }
+    
+    .circle-2 {
+      width: 200px;
+      height: 200px;
+      background: #4361ee;
+      bottom: 15%;
+      right: 8%;
+    }
+    
+    .circle-3 {
+      width: 150px;
+      height: 150px;
+      background: #0097a7;
+      top: 40%;
+      right: 15%;
+    }
+    
+    .circle-4 {
+      width: 180px;
+      height: 180px;
+      background: #3a0ca3;
+      bottom: 25%;
+      left: 10%;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @media (max-width: 1000px) {
+      .tools-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .tool-card {
+        width: 90%;
+        max-width: 500px;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .card-header {
+        height: 180px;
+        font-size: 6rem;
+      }
+      
+      .card-title {
+        font-size: 2rem;
+      }
+      
+      .card-description {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Decorative elements -->
+  <div class="decoration circle circle-1"></div>
+  <div class="decoration circle circle-2"></div>
+  <div class="decoration circle circle-3"></div>
+  <div class="decoration circle circle-4"></div>
+  
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-cubes"></i>
+      </div>
+      <h1>Mini World Tools</h1>
+      <p class="subtitle">Bộ công cụ hỗ trợ tạo script xây dựng tự động trong Mini World</p>
+    </header>
+    
+    <div class="tools-container">
+      <!-- Auto 2D Tool Card -->
+      <div class="tool-card card-2d" id="card2d">
+        <div class="card-header">
+          <i class="fas fa-drafting-compass"></i>
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">Auto 2D</h2>
+          <p class="card-description">Công cụ chuyển đổi hình ảnh 2D thành script xây dựng tự động trong Mini World. Tạo các công trình từ hình vẽ, bản đồ hoặc logo,...</p>
+          
+          <ul class="card-features">
+            <li><i class="fas fa-check-circle"></i> Hỗ trợ định dạng PNG</li>
+            <li><i class="fas fa-check-circle"></i> Chuyển đổi hình ảnh thành mã Lua</li>
+            <li><i class="fas fa-check-circle"></i> Có tối ưu màu các khối</li>
+            <li><i class="fas fa-check-circle"></i> Xem HDSD trước khi dùng</li>
+          </ul>
+          
+          <button class="btn btn-2d" id="btn2d">
+            <i class="fas fa-play-circle"></i> Mở công cụ Auto 2D
+          </button>
+        </div>
+      </div>
+      
+      <!-- Auto 3D Tool Card -->
+      <div class="tool-card card-3d" id="card3d">
+        <div class="card-header">
+          <i class="fas fa-cube"></i>
+        </div>
+        <div class="card-content">
+          <h2 class="card-title">Auto 3D</h2>
+          <p class="card-description">Công cụ chuyển đổi mô hình 3D thành script xây dựng trong Mini World. Tạo các công trình từ file 3D(thật ra chỉ có obj) chỉ với vài bước.</p>
+          
+          <ul class="card-features">
+            <li><i class="fas fa-check-circle"></i> Nhập file từ Drububu Voxelizer</li>
+            <li><i class="fas fa-check-circle"></i> Chuyển đổi JSON thành mã Lua</li>
+            <li><i class="fas fa-check-circle"></i> Sử dụng tương tự như 2D</li>
+            <li><i class="fas fa-check-circle"></i> Thêm dòng này cho cân xứng với bên kia</li>
+          </ul>
+          
+          <button class="btn btn-3d" id="btn3d">
+            <i class="fas fa-play-circle"></i> Mở công cụ Auto 3D
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>Công cụ hỗ trợ người chơi Mini World &copy; 2025 | Hỗ trợ làm map</p>
+    </footer>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const card2d = document.getElementById('card2d');
+      const card3d = document.getElementById('card3d');
+      const btn2d = document.getElementById('btn2d');
+      const btn3d = document.getElementById('btn3d');
+      
+      // Add hover effects
+      card2d.addEventListener('mouseenter', () => {
+        card2d.style.boxShadow = '0 25px 50px rgba(0, 150, 136, 0.4)';
+      });
+      
+      card2d.addEventListener('mouseleave', () => {
+        card2d.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.2)';
+      });
+      
+      card3d.addEventListener('mouseenter', () => {
+        card3d.style.boxShadow = '0 25px 50px rgba(67, 97, 238, 0.4)';
+      });
+      
+      card3d.addEventListener('mouseleave', () => {
+        card3d.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.2)';
+      });
+      
+      // Button click events
+      btn2d.addEventListener('click', () => {
+        alert('Đang chuyển đến công cụ Auto 2D...');
+        window.location.href = '2d.html';
+      });
+      
+      btn3d.addEventListener('click', () => {
+        alert('Đang chuyển đến công cụ Auto 3D...');
+        window.location.href = '3d.html';
+      });
+      
+      // Card click events
+      card2d.addEventListener('click', () => {
+        btn2d.click();
+      });
+      
+      card3d.addEventListener('click', () => {
+        btn3d.click();
+      });
+    });
+  </script>
+</body>
+</html>

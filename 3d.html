@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D in Mini World</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      color: #e6e6ff;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    header {
+      text-align: center;
+      padding: 20px 0;
+      width: 100%;
+    }
+    
+    .logo {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #4cc9f0;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #4cc9f0, #4361ee, #3a0ca3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: #a9d6e5;
+      margin-bottom: 20px;
+      max-width: 800px;
+    }
+    
+    .card {
+      background: rgba(30, 30, 46, 0.8);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(92, 92, 224, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+    
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #4cc9f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    h2 i {
+      background: linear-gradient(135deg, #4361ee, #3a0ca3);
+      padding: 10px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .upload-area {
+      border: 3px dashed #4361ee;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      margin: 20px 0;
+      background: rgba(67, 97, 238, 0.1);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .upload-area:hover {
+      background: rgba(67, 97, 238, 0.2);
+      border-color: #4cc9f0;
+    }
+    
+    .upload-area i {
+      font-size: 4rem;
+      color: #4cc9f0;
+      margin-bottom: 15px;
+    }
+    
+    .upload-text {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+    
+    .file-name {
+      margin-top: 15px;
+      font-style: italic;
+      color: #a9d6e5;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    input[type="file"] {
+      display: none;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #4361ee, #3a0ca3);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: block;
+      width: 100%;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+      margin: 20px 0;
+    }
+    
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.6);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    pre {
+      background: #0d1b2a;
+      color: #90e0ef;
+      padding: 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      max-height: 400px;
+      font-family: 'Consolas', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      border: 1px solid #1d3557;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+      margin-top: 20px;
+    }
+    
+    .step {
+      display: flex;
+      margin-bottom: 25px;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .step-number {
+      background: linear-gradient(135deg, #4361ee, #3a0ca3);
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+      font-size: 1.2rem;
+      margin-top: 3px;
+    }
+    
+    .step-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: #4cc9f0;
+    }
+    
+    .step-content p {
+      line-height: 1.6;
+      color: #caf0f8;
+    }
+    
+    .step-link {
+      display: inline-block;
+      background: rgba(67, 97, 238, 0.2);
+      color: #90e0ef;
+      padding: 8px 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: all 0.3s;
+      border: 1px solid #4361ee;
+    }
+    
+    .step-link:hover {
+      background: rgba(67, 97, 238, 0.4);
+      transform: translateX(5px);
+    }
+    
+    .step-link i {
+      margin-right: 8px;
+    }
+    
+    .example {
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(13, 27, 42, 0.5);
+      border-radius: 10px;
+      border-left: 4px solid #4361ee;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2a9d8f;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transform: translateX(200%);
+      transition: transform 0.4s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .copied {
+      position: absolute;
+      top: -10px;
+      right: 10px;
+      background: #2a9d8f;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .copy-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(67, 97, 238, 0.3);
+      color: #90e0ef;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 10;
+    }
+    
+    .copy-btn:hover {
+      background: rgba(67, 97, 238, 0.5);
+    }
+    
+    .output-container {
+      position: relative;
+    }
+    
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 20px;
+      color: #a9d6e5;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(92, 92, 224, 0.3);
+      width: 100%;
+    }
+    
+    .highlight {
+      color: #ff9e00;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <i class="fas fa-cube"></i>
+    </div>
+    <h1>Chuyển đổi 3D → Mini World Script</h1>
+    <p class="subtitle">Công cụ chuyển đổi mô hình 3D từ Drububu Voxelizer thành mã Lua cho Mini World</p>
+  </header>
+  
+  <div class="container">
+    <div class="card">
+      <h2><i class="fas fa-info-circle"></i> Hướng dẫn sử dụng</h2>
+      
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Truy cập công cụ Drububu Voxelizer</h3>
+          <p>Nhấp vào liên kết bên dưới để mở công cụ chuyển đổi mô hình 3D sang định dạng voxel:</p>
+          <a href="https://drububu.com/miscellaneous/voxelizer/?out=jso" target="_blank" class="step-link">
+            <i class="fas fa-external-link-alt"></i> Mở Drububu Voxelizer
+          </a>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Chuyển đổi mô hình 3D</h3>
+          <p>Trên trang Drububu Voxelizer:</p>
+          <div class="example">
+            <ul>
+              <li>Nhấp vào <span class="highlight">"Choose File"</span> để tải lên file 3D định dạng .obj</li>
+              <li>Điều chỉnh kích thước voxel nếu cần</li>
+              <li>Chọn <span class="highlight">"Export Voxels as JSON"</span></li>
+              <li>Lưu file <span class="highlight">minecraft.json</span> về máy</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Tải lên file JSON</h3>
+          <p>Quay lại trang này và tải lên file <span class="highlight">minecraft.json</span> bạn vừa lưu:</p>
+          <div id="uploadBox" class="upload-area">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <div class="upload-text">Nhấp để chọn file hoặc kéo thả file vào đây</div>
+            <div class="file-name">Chưa có file nào được chọn</div>
+          </div>
+          <input type="file" id="jsonFile" accept=".json">
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Chuyển đổi và sử dụng</h3>
+          <p>Nhấn nút chuyển đổi và sao chép mã Lua để sử dụng trong Mini World:</p>
+          <button id="convertBtn">
+            <i class="fas fa-sync-alt"></i> Chuyển đổi sang Lua Script
+          </button>
+          <div class="example">
+            <p><strong>Lưu ý:</strong> Trong Mini World đặt khối gia củ và nhấp vào nó để dựng mô hình.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2><i class="fas fa-code"></i> Lua Script xuất ra</h2>
+      <div class="output-container">
+        <button class="copy-btn" id="copyBtn">
+          <i class="fas fa-copy"></i> Sao chép
+        </button>
+        <pre id="output">// Script sẽ xuất hiện ở đây sau khi chuyển đổi</pre>
+      </div>
+    </div>
+  </div>
+  
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span id="notificationText">Thông báo</span>
+  </div>
+  
+  <footer>
+    <p>Công cụ chuyển đổi 3D sang Mini World Script &copy; 2023 | Drububu Voxelizer Converter</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadArea = document.getElementById('uploadBox');
+      const fileInput = document.getElementById('jsonFile');
+      const convertBtn = document.getElementById('convertBtn');
+      const output = document.getElementById('output');
+      const fileName = document.querySelector('.file-name');
+      const copyBtn = document.getElementById('copyBtn');
+      const notification = document.getElementById('notification');
+      const notificationText = document.getElementById('notificationText');
+      
+      // Upload area click handler
+      uploadArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      // Drag and drop functionality
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#4cc9f0';
+        uploadArea.style.backgroundColor = 'rgba(67, 97, 238, 0.3)';
+      });
+      
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#4361ee';
+        uploadArea.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+      });
+      
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#4361ee';
+        uploadArea.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+        
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelection();
+        }
+      });
+      
+      // File input change handler
+      fileInput.addEventListener('change', handleFileSelection);
+      
+      function handleFileSelection() {
+        if (fileInput.files.length) {
+          const file = fileInput.files[0];
+          fileName.textContent = file.name;
+          convertBtn.disabled = false;
+        } else {
+          fileName.textContent = 'Chưa có file nào được chọn';
+          convertBtn.disabled = true;
+        }
+      }
+      
+      // Convert button handler
+      convertBtn.addEventListener('click', () => {
+        if (!fileInput.files.length) {
+          showNotification('Vui lòng chọn file trước!', 'error');
+          return;
+        }
+        
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = e => {
+          try {
+            const json = JSON.parse(e.target.result);
+            
+            if (!Array.isArray(json.voxels)) throw new Error('File không có mảng voxels');
+            
+            // Map ra x,y,z, convert sang số
+            const blocks = json.voxels.map(v => ({
+              x: Number(v.x),
+              y: Number(v.y),
+              z: Number(v.z)
+            }));
+            
+            // Tạo Lua script
+            const luaScript = `-- Script được tạo từ: ${file.name}
+-- Số lượng khối: ${blocks.length}
+
+local blocks = {
+${blocks.map(b => `  {x=${b.x}, y=${b.y}, z=${b.z}}`).join(',\n')}
+}
+
+ScriptSupportEvent:registerEvent("Game.AnyPlayer.EnterGame", function(e)
+  local _, u = Player:getHostUin()
+  uin = u
+  Player:gainItems(uin, 959, 1, 1)
+  Game:msgBox("Đặt khối gia củ và nhấp để dựng mô hình")
+end)
+
+ScriptSupportEvent:registerEvent("Player.ClickBlock", function(e)
+  if e.blockid == 959 then
+    Block:destroyBlock(e.x, e.y, e.z, false)
+    for _, block in ipairs(blocks) do
+      Block:setBlockAll(block.x + e.x, block.y + e.y, block.z + e.z, 667, 0)
+    end
+    Game:msgBox("Mô hình đã được dựng thành công!")
+  end
+end)
+
+-- Mini World Script bởi Drububu Converter`;
+            
+            output.textContent = luaScript;
+            showNotification('Chuyển đổi thành công! Sao chép script để sử dụng trong Mini World.', 'success');
+          } catch (err) {
+            showNotification('Lỗi file JSON: ' + err.message, 'error');
+          }
+        };
+        
+        reader.readAsText(file);
+      });
+      
+      // Copy button handler
+      copyBtn.addEventListener('click', () => {
+        const textarea = document.createElement('textarea');
+        textarea.value = output.textContent;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        
+        showNotification('Đã sao chép script vào clipboard!', 'success');
+      });
+      
+      // Show notification function
+      function showNotification(message, type) {
+        notificationText.textContent = message;
+        notification.className = 'notification';
+        
+        if (type === 'success') {
+          notification.style.background = '#2a9d8f';
+        } else if (type === 'error') {
+          notification.style.background = '#e63946';
+        }
+        
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
+      
+      // Disable convert button initially
+      convertBtn.disabled = true;
+    });
+  </script>
+</body>
+</html>
