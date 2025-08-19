@@ -761,7 +761,7 @@
                 data = nearest.data;
               }
 
-              return { x: -Number(v.x), y: Number(v.y), z: -Number(v.z), id, data };
+              return { x: -Number(v.x), y: Number(v.y), z: Number(v.z), id, data };
             });
             
             const luaScript = `-- Script được tạo từ: ${file.name}
@@ -827,4 +827,5 @@ end)
   </script>
 </body>
 </html>
+
 
